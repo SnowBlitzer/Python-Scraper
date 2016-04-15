@@ -1,0 +1,12 @@
+{% extends "base.html" %} 
+{% block content %} 
+<h1>{{title}}</h1> 
+<form action="" method="post" name="event_search"> 
+  {{form.hidden_tag()}} 
+  <p> Please enter a topic you would like to search for: 
+    <br>{{form.article_name(size=80)}}<br> 
+  </p> 
+  <p> Select a location: {{form.news_site}} </p> 
+  <p><input type="submit" value="Find the Articles!"></p>    
+</form> 
+{% endblock %} 
