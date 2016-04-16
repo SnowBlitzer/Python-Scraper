@@ -3,9 +3,12 @@ import scrapy
 class NewsSpider(scrapy.Spider):
     name = "news"
     start_urls = [
-
-        "http://www.abcnews.go.com/US",
-
+        #Independent
+        "http://www.independent.co.uk/news/uk/politics",
+        "http://www.independent.co.uk/news/business",
+        "http://www.independent.co.uk/news/world",
+        "http://www.independent.co.uk/news/world/americas",
+        "http://www.independent.co.uk/life-style/gadgets-and-tech",
         #FOX
         "http://www.foxbusiness.com/politics.html",
         "http://www.foxbusiness.com/markets.html",
@@ -29,10 +32,13 @@ class NewsSpider(scrapy.Spider):
         file_name= file2+"_"+file1
 
 
-        if file2 == "bbc":
+        if "bbc" in file2:
             self.bbc_work(response, file_name)
         if file2 == "foxbusiness":
             self.fox_work(response, file_name)
+        else:
+            print(response)
+            self.writer(response, file_name)
         #if file2 == "go":
         #    print("Yes maybe?")
         #    head = "<a href"
@@ -103,8 +109,35 @@ class NewsSpider(scrapy.Spider):
                 link = "\"url\": \"" + link +"\",}\n"
                 jfile.write(title+link)
 
-    def abc_work(self, response):
-        pass
+    def writer(self, response, file_name):
+        html_file = file_name + ".html"
+        json_file = file_name + ".json"
+
+        with open(html_file, 'wb') as f:
+            f.write(response.body)
+
+        head = "<h1><a href=\""
+
+        url = "http://www.independent.co.uk"
+
+        news = open(html_file,'r+')
+        jfile = open(json_file,'wb')
+
+        link = ""
+        title = ""
+        for href in news.readlines():
+            if head in href:
+                title = href.split("<")[-3]
+                title = title.split(">")[-1]
+                title = "{\"title\": \"" + title +"\",\n"
+
+                link = href.split("href=\"")[1]
+                link = link.split("\"")[0]
+                if "http" not in link:
+                    link = url +link
+                link = "\"url\": \"" + link +"\",}\n"
+                jfile.write(title+link)
+
 
     def make_files(self, response, file_name):
         pass
