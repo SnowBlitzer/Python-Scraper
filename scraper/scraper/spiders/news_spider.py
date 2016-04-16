@@ -3,6 +3,11 @@ import scrapy
 class NewsSpider(scrapy.Spider):
     name = "news"
     start_urls = [
+        #Guardian
+        "http://www.theguardian.com/us-news",
+        "http://www.theguardian.com/us-news/us-elections-2016",
+        "http://www.theguardian.com/us/technology",
+        "http://www.theguardian.com/world",
         #Independent
         "http://www.independent.co.uk/news/uk/politics",
         "http://www.independent.co.uk/news/business",
@@ -34,23 +39,19 @@ class NewsSpider(scrapy.Spider):
 
         if "bbc" in file2:
             self.bbc_work(response, file_name)
-        if file2 == "foxbusiness":
+        if "foxbusiness" in file2:
             self.fox_work(response, file_name)
+        if "independent" in file2:
+            self.independent_work(response, file_name)
+        if "guardian" in file2:
+            self.guardian_work(response, file_name)
         else:
-            print(response)
-            self.writer(response, file_name)
-        #if file2 == "go":
-        #    print("Yes maybe?")
-        #    head = "<a href"
+            self.make_files(response, file_name)
 
 
 
     def bbc_work(self,response, file_name):
-        html_file = file_name + ".html"
-        json_file = file_name + ".json"
-
-        with open(html_file, 'wb') as f:
-            f.write(response.body)
+        html_file, json_file = self.make_files(response,file_name)
 
         head = "title-link__title-text"
         url_head = "class=\"title-link\""
@@ -81,14 +82,8 @@ class NewsSpider(scrapy.Spider):
                 link = ""
 
 
-
-
     def fox_work(self,response, file_name):
-        html_file = file_name + ".html"
-        json_file = file_name + ".json"
-
-        with open(html_file, 'wb') as f:
-            f.write(response.body)
+        html_file, json_file = self.make_files(response,file_name)
 
         head = "<h3><a href="
         url = "http://www.foxbusiness.com"
@@ -96,25 +91,11 @@ class NewsSpider(scrapy.Spider):
         news = open(html_file,'r+')
         jfile = open(json_file,'wb')
 
-        for href in news.readlines():
-            if head in href:
-                title = href.split("<")[-3]
-                title = title.split(">")[-1]
-                title = "{\"title\": \"" + title +"\",\n"
+        self.extactor(head,url,news,jfile)
 
-                link = href.split("href=\"")[1]
-                link = link.split("\"")[0]
-                if "http" not in link:
-                    link = url +link
-                link = "\"url\": \"" + link +"\",}\n"
-                jfile.write(title+link)
 
-    def writer(self, response, file_name):
-        html_file = file_name + ".html"
-        json_file = file_name + ".json"
-
-        with open(html_file, 'wb') as f:
-            f.write(response.body)
+    def independent_work(self, response, file_name):
+        html_file, json_file = self.make_files(response,file_name)
 
         head = "<h1><a href=\""
 
@@ -123,8 +104,50 @@ class NewsSpider(scrapy.Spider):
         news = open(html_file,'r+')
         jfile = open(json_file,'wb')
 
-        link = ""
-        title = ""
+        self.extactor(head,url,news,jfile)
+
+
+    def guardian_work(self, response, file_name):
+        html_file, json_file = self.make_files(response,file_name)
+
+        head = "<a href=\""
+        url = "http://www.theguardian.com/"
+        news = open(html_file,'r+')
+        jfile = open(json_file,'wb')
+
+
+        for href in news.readlines():
+            if head in href:
+                title = href.split("<")[-2]
+                title = title.split(">")[-1]
+                if title == "":
+                    continue
+
+                title = "{\"title\": \"" + title +"\",\n"
+
+                link = href.split("href=\"")[1]
+                link = link.split("\"")[0]
+                if "http" not in link:
+                    link = url +link
+                if "theguardian" not in link:
+                    continue
+                link = "\"url\": \"" + link +"\",}\n"
+                jfile.write(title+link)
+                link = ""
+                title = ""
+
+
+    def make_files(self, response, file_name):
+        html_file = file_name + ".html"
+        json_file = file_name + ".json"
+
+        with open(html_file, 'wb') as f:
+            f.write(response.body)
+
+        return html_file, json_file
+
+
+    def extactor(self,head,url,news,jfile):
         for href in news.readlines():
             if head in href:
                 title = href.split("<")[-3]
@@ -137,7 +160,5 @@ class NewsSpider(scrapy.Spider):
                     link = url +link
                 link = "\"url\": \"" + link +"\",}\n"
                 jfile.write(title+link)
-
-
-    def make_files(self, response, file_name):
-        pass
+                link = ""
+                title = ""
