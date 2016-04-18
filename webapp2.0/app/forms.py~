@@ -1,0 +1,15 @@
+from flask.ext.wtf import Form 
+from wtforms import StringField, SelectField, SelectMultipleField 
+from wtforms.validators import DataRequired 
+from wtforms import widgets
+#, CheckboxInput, ListWidget
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+class ArticleSearch(Form): 
+    article_name = StringField('article_name', validators=[DataRequired()])
+    news_site = MultiCheckboxField('news_site', choices=[('bbc_technology.json', 'BBC Technology'), ('bbc_health.json', 'BBC Health'), ('bbc_us_and_canada.json', 'BBC US/Canada'), ('bbc_world.json', 'BBC World'),('foxbusiness_markets.json', 'Fox Markets'),('foxbusiness_politics.json', 'Fox Politics'),('foxbusiness_technology.json', 'Fox Technology') ]) 	   
+    #news_site = SelectMultipleField('news_site', choices=[('bbc_technology.json', 'BBC Technology'), ('bbc_health.json', 'BBC Health'), ('bbc_us_and_canada.json', 'BBC US/Canada'), ('bbc_world.json', 'BBC World'),('foxbusiness_markets.json', 'Fox Business'),('foxbusiness_politics.json', 'Fox Politics'), ('any', 'Any')]) 
+    

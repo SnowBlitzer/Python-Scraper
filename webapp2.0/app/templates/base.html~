@@ -1,0 +1,16 @@
+<html> 
+  <head> 
+    <title>News Articles! See them all!</title> 
+  </head> 
+  <body> 
+    <h1> Welcome to the place where you can see all of the news articles! </h1>   
+    <div id="hmenu"> 
+     <ul> 
+      <li><a href="{{url_for('index')}}">Home</a></li> 
+      <li><a href="{{url_for('search')}}">Search</a></li> 
+      <li><a href="{{url_for('candidates')}}">Candidates</a></li> 
+     </ul> 
+    </div> 
+    {% block content %} {% endblock %}	
+  </body> 
+</html> 

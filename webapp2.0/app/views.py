@@ -1,10 +1,15 @@
 from flask import render_template
-import app
+from app import my_app
 from app.forms import ArticleSearch
-#import bbc_technology.json #impost w.e function makes json file instead
+from search_generator import search_word, pres_candidates
 import json
 
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
 #For spider
+#import twisted 
 from twisted.internet import reactor
 from scrapy.crawler import Crawler
 from scrapy.settings import Settings
@@ -23,22 +28,23 @@ def index():
 @my_app.route('/search', methods=['GET', 'POST'])
 def search():
 	form = ArticleSearch()
-	f = open("bbc_technology.json", 'rb')
+	#crawls()
+	#make_dict("bbc_technology.json")
+	#pres_candidates()
 	posts = []
-	for line in f:
-		temp = line[11:]
-		posts.append(temp.rsplit('"')[0])
-	print posts
 	if form.validate_on_submit(): #when user hits submit, make posts
-		crawls()
-
 		article_name = form.article_name.data
 		news_site = form.news_site.data
-		#posts = get_posts(article_names, news_site)
-		#posts = bbc_technology.json
-		#print posts
-		f = open("bbc_technology.json", 'rb')
-	return render_template('search.html', title='Search for an Article', form=form)
+		posts = search_word(news_site, article_name)
+	return render_template('search.html', title='Search for an Article', form=form, posts = posts)
+
+@my_app.route('/candidates')
+def candidates():
+	posts = pres_candidates()
+	return render_template('candidates.html', title='Candidates Mentioned', posts = posts)
+
+
+
 
 def crawls():
 	spider = NewsSpider()

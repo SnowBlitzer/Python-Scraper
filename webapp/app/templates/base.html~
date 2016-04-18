@@ -1,9 +1,0 @@
-<html>
-	<head>
-		<title>News Scraper</title>title>
-	</head>
-	<body>
-		<h1>Welcome to our News Scraper!</h1>
-		{%block content%} {%endblock%}
-	</body>
-</html>

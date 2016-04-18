@@ -1,0 +1,51 @@
+from flask import render_template
+from app import my_app
+from app.forms import ArticleSearch
+from search_generator import search_word, pres_candidates
+import json
+
+#For spider
+#import twisted 
+from twisted.internet import reactor
+from scrapy.crawler import Crawler
+from scrapy.settings import Settings
+from scrapy import signals
+import scrapy
+
+from news_spider import NewsSpider
+
+
+@my_app.route('/')
+@my_app.route('/index')
+def index():
+	return render_template('index.html')
+	#return "HI there"
+
+@my_app.route('/search', methods=['GET', 'POST'])
+def search():
+	form = ArticleSearch()
+	#crawls()
+	#make_dict("bbc_technology.json")
+	#pres_candidates()
+	posts = []
+	if form.validate_on_submit(): #when user hits submit, make posts
+		article_name = form.article_name.data
+		news_site = form.news_site.data
+		posts = search_word(news_site, article_name)
+	return render_template('search.html', title='Search for an Article', form=form, posts = posts)
+
+@my_app.route('/candidates')
+def candidates():
+	posts = pres_candidates()
+	return render_template('candidates.html', title='Candidates Mentioned', posts = posts)
+
+
+
+
+def crawls():
+	spider = NewsSpider()
+	crawler = Crawler(spider, Settings())
+	crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
+	crawler.crawl()
+	reactor.run(installSignalHandlers=False)
+	#reactor.run(installSignalHandlers=False) # the script will block here
