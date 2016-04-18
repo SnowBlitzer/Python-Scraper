@@ -1,5 +1,5 @@
 from flask import render_template
-from app import my_app
+import app
 from app.forms import ArticleSearch
 #import bbc_technology.json #impost w.e function makes json file instead
 import json
