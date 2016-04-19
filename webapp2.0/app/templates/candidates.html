@@ -1,0 +1,101 @@
+<!--blah-->
+{% extends "base.html" %} 
+{% block content %} 
+<h1>{{title}}</h1> 
+ <table id="t01"> 
+  <thead>
+  <caption><h2>BBC News Result</h2></caption> 
+   <tr> 
+    <th>Candidate</th> 
+    <th>Number of Times Mentioned</th> 
+    <th>Article</th>
+   </tr> 
+  </thead> 
+  <tbody> 
+  {% for p in posts %} 
+   <tr> 
+    <td>{{ p }}</td>
+    <td>{{ posts[p].get('bbc').get('num_sited') }}</td>
+    <td> 
+     {% for a in posts[p].get('bbc').get('ref') %} 
+	<p><a href= "{{a.get('url')}}" >{{a.get('title')}}</a></p> 
+     {% endfor %}
+    </td>
+   </tr> 
+  {% endfor %} 
+  </tbody> 
+ </table> 
+  
+ <table id="t01"> 
+  <thead>
+  <caption><h2>FOX News Result</h2></caption> 
+   <tr> 
+    <th>Candidate</th> 
+    <th>Number of Times Mentioned</th> 
+    <th>Article</th>
+   </tr> 
+  </thead> 
+  <tbody> 
+  {% for p in posts %} 
+   <tr> 
+    <td>{{ p }}</td>
+    <td>{{ posts[p].get('fox').get('num_sited') }}</td>
+    <td> 
+     {% for a in posts[p].get('fox').get('ref') %} 
+	<p><a href= "{{a.get('url')}}" >{{a.get('title')}}</a></p> 
+     {% endfor %}
+    </td>
+   </tr> 
+  {% endfor %} 
+  </tbody> 
+ </table> 
+
+<table id="t01"> 
+  <thead>
+  <caption><h2>Independent News Result</h2></caption> 
+   <tr> 
+    <th>Candidate</th> 
+    <th>Number of Times Mentioned</th> 
+    <th>Article</th>
+   </tr> 
+  </thead> 
+  <tbody> 
+  {% for p in posts %} 
+   <tr> 
+    <td>{{ p }}</td>
+    <td>{{ posts[p].get('independent').get('num_sited') }}</td>
+    <td> 
+     {% for a in posts[p].get('independent').get('ref') %} 
+	<p><a href= "{{a.get('url')}}" >{{a.get('title')}}</a></p> 
+     {% endfor %}
+    </td>
+   </tr> 
+  {% endfor %} 
+  </tbody> 
+ </table> 
+
+<table id="t01"> 
+  <thead>
+  <caption><h2>The Guardian News Result</h2></caption> 
+   <tr> 
+    <th>Candidate</th> 
+    <th>Number of Times Mentioned</th> 
+    <th>Article</th>
+   </tr> 
+  </thead> 
+  <tbody> 
+  {% for p in posts %} 
+   <tr> 
+    <td>{{ p }}</td>
+    <td>{{ posts[p].get('theguardian').get('num_sited') }}</td>
+    <td> 
+     {% for a in posts[p].get('theguardian').get('ref') %} 
+	<p><a href= "{{a.get('url')}}" >{{a.get('title')}}</a></p> 
+     {% endfor %}
+    </td>
+   </tr> 
+  {% endfor %} 
+  </tbody> 
+ </table> 
+
+{% endblock %} 

@@ -1,0 +1,32 @@
+<!--blah-->
+{% extends "base.html" %} 
+{% block content  %} 
+<h1>{{title}}</h1> 
+<form action="" method="post" name="event_search"> 
+  {{form.hidden_tag()}} 
+  <p> Please enter a topic you would like to search for: 
+    <br>{{form.article_name(size=80)}}<br> 
+  </p> 
+  <p> Select a news site: {{form.news_site}} </p> 
+  <p><input type="submit" value="Find the Articles!"></p>    
+</form> 
+{% if posts %} 
+ <table> 
+  <thead> 
+   <tr> 
+    <th>Source</th>
+    <th>Title</th> 
+    <th>Link</th>
+   </tr> 
+  </thead> 
+  <tbody> 
+  {% for p in posts %} 
+   <tr> 
+    <td>{{ p['source'] }}</td>
+    <td>{{ p['title'] }}</td>
+    <td><a href= "{{p['url']}}" >Link</a></td> 
+   </tr> {% endfor %} 
+  </tbody> 
+ </table> 
+{% endif %}
+{% endblock %} 
