@@ -1,18 +1,132 @@
 <html> 
   <head> 
-    <title>News Articles! See them all!</title> 
+    <title><h1>News Articles! See them all!</h1></title> 
     <link rel="stylesheet" type="text/css" 
         href="{{ url_for('static',filename='style.css') }}"> 
   </head> 
   <body> 
-    <h1> Welcome to the place where you can see all of the news articles! </h1>   
+  <style>
+  body
+{
+   background-color: lightblue;
+}
+
+table, th, td{
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+th, td{
+  padding: 15px
+}
+
+h1{
+  color: grey; 
+  font: 30px tahoma;
+  text-shadow: black;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: blue;
+}
+
+li {
+    float: left;
+}
+
+li a, .dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: red;
+}
+
+li.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: relative;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown-content a {
+    color: black;
+    background-color: blue;
+    position: relative;
+    left:290;
+    top:0;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f9f9f9}
+
+.show {display:block;}
+</style>
+</head>
+<body>
+
+<ul>
+  <li class="dropdown">
+   <!-- <a href="javascript:void(0)" class="dropbtn" onclick="myFunction()"></a>-->
+      <li><a href="{{url_for('index')}}">Home</a></li> 
+      <li><a href="{{url_for('search')}}">Search</a></li> 
+      <li><a href="{{url_for('candidates')}}">Candidates</a></li>
+      <!--<a href="javascript:void(0)" class="dropbtn" onclick="myFunction()">Candidates By News Source</a> 
+      <div id="myDropdown" class="dropdown-content">
+      <a href="#Fox">Fox News</a>
+      <a href="#BBC">BBC</a>
+      <a href="#Guard">Guardian</a>
+      <a href="#Independent">Independent</a>
+    </div>-->
+  </li>
+</ul>
+
+<h3>Welcome to the place where you can see all of the news articles!</h3>
+
+<script>
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(e) {
+  if (!e.target.matches('.dropbtn')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var d = 0; d < dropdowns.length; d++) {
+      var openDropdown = dropdowns[d];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+</script>
+  <!--<h1> Welcome to the place where you can see all of the news articles! </h1>   
     <div id="hmenu"> 
      <ul> 
       <li><a href="{{url_for('index')}}">Home</a></li> 
       <li><a href="{{url_for('search')}}">Search</a></li> 
       <li><a href="{{url_for('candidates')}}">Candidates</a></li> 
      </ul> 
-    </div> 
+    </div>-->
     {% block content %} {% endblock %}	
   </body> 
 </html> 
