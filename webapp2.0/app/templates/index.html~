@@ -1,5 +1,0 @@
-{% extends "base.html" %}
-{% block content %} 
-<h2> Find the best ticket prices in town with the 
-Taylor Swift Concert Ticket-Price Showdown! </h2> 
-{% endblock %} 
